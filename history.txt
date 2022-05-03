@@ -1,0 +1,26 @@
+# Tarefa 1
+
+docker image build . -t custom-caddy:2.5.0-apine
+docker container run \
+    --name mycaddy \
+    -p 1024:80 \
+    -d custom-caddy:2.5.0-apine
+
+# Tarefa 2
+
+# temos que parar a imagem uma vez pelo menos
+
+docker container stop mycaddy
+docker container rm mycaddy
+
+# rebuild com o volume para os arquivos html
+
+docker image build . -t custom-caddy:2.5.0-apine
+docker container run \
+    --name mycaddy \
+    -p 1024:80 \
+    -v $PWD/pages:/usr/src/pages \
+    -d custom-caddy:2.5.0-apine
+
+echo "<h1>New Page</h1>" > pages/newpage.html
+http :1024/newpage
